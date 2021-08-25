@@ -42,13 +42,16 @@ func init() {
 type InMessage struct {
 	remaining []byte
 	storage   []byte
+	size      int
 }
 
 // Initialize with the data read by a single call to r.Read. The first call to
 // Consume will consume the bytes directly after the fusekernel.InHeader
 // struct.
 func (m *InMessage) Init(r io.Reader) error {
-	m.storage = make([]byte, bufSize, bufSize)
+	if m.storage == nil {
+		m.storage = make([]byte, bufSize, bufSize)
+	}
 	n, err := r.Read(m.storage[:])
 	if err != nil {
 		return err
@@ -60,6 +63,7 @@ func (m *InMessage) Init(r io.Reader) error {
 		return fmt.Errorf("Unexpectedly read only %d bytes.", n)
 	}
 
+	m.size = n
 	m.remaining = m.storage[headerSize:n]
 
 	// Check the header's length.
@@ -107,4 +111,12 @@ func (m *InMessage) ConsumeBytes(n uintptr) []byte {
 	m.remaining = m.remaining[n:]
 
 	return b
+}
+
+// Get the next n bytes after the message to use them as a temporary buffer
+func (m *InMessage) GetFree(n int) []byte {
+	if n <= 0 || n > len(m.storage)-m.size {
+		return nil
+	}
+	return m.storage[m.size : m.size+n]
 }

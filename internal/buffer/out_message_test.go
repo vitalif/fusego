@@ -107,7 +107,10 @@ func TestOutMessageAppend(t *testing.T) {
 		t.Errorf("om.Len() = %d, want %d", got, want)
 	}
 
-	b := om.Bytes()
+	b := []byte(nil)
+	for i := 0; i < len(om.Sglist); i++ {
+		b = append(b, om.Sglist[i]...)
+	}
 	if got, want := len(b), wantLen; got != want {
 		t.Fatalf("len(om.Bytes()) = %d, want %d", got, want)
 	}
@@ -137,7 +140,10 @@ func TestOutMessageAppendString(t *testing.T) {
 		t.Errorf("om.Len() = %d, want %d", got, want)
 	}
 
-	b := om.Bytes()
+	b := []byte(nil)
+	for i := 0; i < len(om.Sglist); i++ {
+		b = append(b, om.Sglist[i]...)
+	}
 	if got, want := len(b), wantLen; got != want {
 		t.Fatalf("len(om.Bytes()) = %d, want %d", got, want)
 	}
@@ -168,7 +174,10 @@ func TestOutMessageShrinkTo(t *testing.T) {
 		t.Errorf("om.Len() = %d, want %d", got, want)
 	}
 
-	b := om.Bytes()
+	b := []byte(nil)
+	for i := 0; i < len(om.Sglist); i++ {
+		b = append(b, om.Sglist[i]...)
+	}
 	if got, want := len(b), wantLen; got != want {
 		t.Fatalf("len(om.Bytes()) = %d, want %d", got, want)
 	}
@@ -283,7 +292,10 @@ func TestOutMessageGrow(t *testing.T) {
 		t.Errorf("om.Len() = %d, want %d", got, want)
 	}
 
-	b := om.Bytes()
+	b := []byte(nil)
+	for i := 0; i < len(om.Sglist); i++ {
+		b = append(b, om.Sglist[i]...)
+	}
 	if got, want := len(b), wantLen; got != want {
 		t.Fatalf("len(om.Len()) = %d, want %d", got, want)
 	}
@@ -304,7 +316,7 @@ func BenchmarkOutMessageReset(b *testing.B) {
 			om.Reset()
 		}
 
-		b.SetBytes(int64(unsafe.Offsetof(om.payload)))
+		b.SetBytes(int64(om.Len()))
 	})
 
 	// Many megabytes worth of buffers, which should defeat the CPU cache.
@@ -321,7 +333,7 @@ func BenchmarkOutMessageReset(b *testing.B) {
 			oms[i%numMessages].Reset()
 		}
 
-		b.SetBytes(int64(unsafe.Offsetof(oms[0].payload)))
+		b.SetBytes(int64(oms[0].Len()))
 	})
 }
 
