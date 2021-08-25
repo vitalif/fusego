@@ -517,7 +517,14 @@ func (c *Connection) Reply(ctx context.Context, opErr error) error {
 		}
 
 		// Make sure we destroy the messages when we're done.
-		c.putInMessage(inMsg)
+		suppressReuse := false
+		if wr, ok := op.(*fuseops.WriteFileOp); ok {
+			suppressReuse = wr.SuppressReuse
+		}
+
+		if !suppressReuse {
+			c.putInMessage(inMsg)
+		}
 		c.putOutMessage(outMsg)
 	}()
 

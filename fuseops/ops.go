@@ -783,6 +783,17 @@ type WriteFileOp struct {
 	// to be because it uses file mmapping machinery
 	// (https://tinyurl.com/avxy3dvm) to write a page at a time.
 	Data      []byte
+
+	// Set by the file system: "no reuse" flag.
+	//
+	// By default, the Data buffer is reused by the library, so the file system
+	// must copy the data if it wants to use it later.
+	//
+	// However, if the file system sets this flag to true, the library doesn't
+	// reuse this buffer, so the file system can safely store and use Data slice
+	// without copying memory.
+	SuppressReuse bool
+
 	OpContext OpContext
 
 	// If set, this function will be invoked after the operation response has been
