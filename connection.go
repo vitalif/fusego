@@ -480,8 +480,15 @@ func (c *Connection) Reply(ctx context.Context, opErr error) {
 	outMsg := state.outMsg
 	fuseID := inMsg.Header().Unique
 
+	suppressReuse := false
+	if wr, ok := op.(*fuseops.WriteFileOp); ok {
+		suppressReuse = wr.SuppressReuse
+	}
+
 	// Make sure we destroy the messages when we're done.
-	defer c.putInMessage(inMsg)
+	if !suppressReuse {
+		defer c.putInMessage(inMsg)
+	}
 	defer c.putOutMessage(outMsg)
 
 	// Clean up state for this op.

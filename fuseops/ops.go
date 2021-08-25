@@ -741,7 +741,18 @@ type WriteFileOp struct {
 	// be written, except on error (http://goo.gl/KUpwwn). This appears to be
 	// because it uses file mmapping machinery (http://goo.gl/SGxnaN) to write a
 	// page at a time.
-	Data      []byte
+	Data []byte
+
+	// Set by the file system: "no reuse" flag.
+	//
+	// By default, the Data buffer is reused by the library, so the file system
+	// must copy the data if it wants to use it later.
+	//
+	// However, if the file system sets this flag to true, the library doesn't
+	// reuse this buffer, so the file system can safely store and use Data slice
+	// without copying memory.
+	SuppressReuse bool
+
 	OpContext OpContext
 }
 
