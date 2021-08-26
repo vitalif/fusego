@@ -160,8 +160,13 @@ func (fs *readonlyLoopbackFs) ReadFile(
 		return fuse.EIO
 	}
 
-	contents = contents[op.Offset:]
-	op.BytesRead = copy(op.Dst, contents)
+	end := op.Offset+op.Size
+	if end > int64(len(contents)) {
+		end = int64(len(contents))
+	}
+
+	op.Data = [][]byte{ contents[op.Offset : end] }
+	op.BytesRead = int(end-op.Offset)
 	return nil
 }
 

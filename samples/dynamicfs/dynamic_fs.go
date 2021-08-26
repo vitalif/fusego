@@ -246,7 +246,8 @@ func (fs *dynamicFS) ReadFile(
 	}
 	reader := strings.NewReader(contents)
 	var err error
-	op.BytesRead, err = reader.ReadAt(op.Dst, op.Offset)
+	op.Data = [][]byte{ make([]byte, op.Size) }
+	op.BytesRead, err = reader.ReadAt(op.Data[0], op.Offset)
 	if err == io.EOF {
 		return nil
 	}

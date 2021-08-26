@@ -196,7 +196,12 @@ func (fs *flushFS) ReadFile(
 	}
 
 	// Read what we can.
-	op.BytesRead = copy(op.Dst, fs.fooContents[op.Offset:])
+	end := op.Offset+op.Size
+	if end > int64(len(fs.fooContents)) {
+		end = int64(len(fs.fooContents))
+	}
+	op.Data = [][]byte{ fs.fooContents[op.Offset : end] }
+	op.BytesRead = int(end-op.Offset)
 
 	return nil
 }

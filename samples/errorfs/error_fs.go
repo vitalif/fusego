@@ -26,7 +26,7 @@ import (
 	"github.com/jacobsa/fuse/fuseutil"
 )
 
-const FooContents = "xxxx"
+var FooContents = []byte("xxxx")
 
 const fooInodeID = fuseops.RootInodeID + 1
 
@@ -171,7 +171,8 @@ func (fs *errorFS) ReadFile(
 		return fmt.Errorf("Unexpected request: %#v", op)
 	}
 
-	op.BytesRead = copy(op.Dst, FooContents)
+	op.Data = [][]byte{FooContents}
+	op.BytesRead = len(FooContents)
 
 	return nil
 }

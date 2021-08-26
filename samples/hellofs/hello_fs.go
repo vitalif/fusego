@@ -250,7 +250,8 @@ func (fs *helloFS) ReadFile(
 	reader := strings.NewReader("Hello, world!")
 
 	var err error
-	op.BytesRead, err = reader.ReadAt(op.Dst, op.Offset)
+	op.Data = [][]byte{ make([]byte, op.Size) }
+	op.BytesRead, err = reader.ReadAt(op.Data[0], op.Offset)
 
 	// Special case: FUSE doesn't expect us to return io.EOF.
 	if err == io.EOF {

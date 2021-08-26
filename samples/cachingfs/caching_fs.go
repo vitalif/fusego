@@ -368,6 +368,8 @@ func (fs *cachingFS) ReadFile(
 	ctx context.Context,
 	op *fuseops.ReadFileOp) error {
 	var err error
-	op.BytesRead, err = io.ReadFull(rand.Reader, op.Dst)
+	dst := make([]byte, op.Size)
+	op.BytesRead, err = io.ReadFull(rand.Reader, dst)
+	op.Data = [][]byte{dst}
 	return err
 }

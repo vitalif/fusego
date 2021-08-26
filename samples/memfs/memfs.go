@@ -692,7 +692,8 @@ func (fs *memFS) ReadFile(
 
 	// Serve the request.
 	var err error
-	op.BytesRead, err = inode.ReadAt(op.Dst, op.Offset)
+	op.Data = [][]byte{ make([]byte, op.Size) }
+	op.BytesRead, err = inode.ReadAt(op.Data[0], op.Offset)
 
 	// Don't return EOF errors; we just indicate EOF to fuse using a short read.
 	if err == io.EOF {
