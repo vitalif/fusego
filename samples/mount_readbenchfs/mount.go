@@ -11,6 +11,7 @@ import (
 
 var fMountPoint = flag.String("mount_point", "", "Path to mount point.")
 var fReadOnly = flag.Bool("read_only", false, "Mount in read-only mode.")
+var fVectored = flag.Bool("vectored", false, "Use vectored read.")
 var fDebug = flag.Bool("debug", false, "Enable debug logging.")
 
 func main() {
@@ -28,6 +29,7 @@ func main() {
 
 	cfg := &fuse.MountConfig{
 		ReadOnly: *fReadOnly,
+		UseVectoredRead: *fVectored,
 	}
 
 	if *fDebug {
