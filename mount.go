@@ -20,6 +20,7 @@ import (
 	"net"
 	"os"
 	"os/exec"
+	"sync/atomic"
 	"syscall"
 )
 
@@ -71,6 +72,9 @@ func Mount(
 	if cfgCopy.OpContext == nil {
 		cfgCopy.OpContext = context.Background()
 	}
+	if cfgCopy.ReaderThreads < 1 {
+		cfgCopy.ReaderThreads = 1
+	}
 
 	// Create a Connection object wrapping the device.
 	connection, err := newConnection(
@@ -83,11 +87,16 @@ func Mount(
 	}
 
 	// Serve the connection in the background. When done, set the join status.
-	go func() {
-		server.ServeOps(connection)
-		mfs.joinStatus = connection.close()
-		close(mfs.joinStatusAvailable)
-	}()
+	atomic.AddInt64(&mfs.joinRemaining, int64(cfgCopy.ReaderThreads))
+	for i := 0; i < cfgCopy.ReaderThreads; i++ {
+		go func() {
+			server.ServeOps(connection)
+			if atomic.AddInt64(&mfs.joinRemaining, -1) == 0 {
+				mfs.joinStatus = connection.close()
+				close(mfs.joinStatusAvailable)
+			}
+		}()
+	}
 
 	// Wait for the mount process to complete.
 	if err := <-ready; err != nil {

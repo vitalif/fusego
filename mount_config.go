@@ -161,6 +161,11 @@ type MountConfig struct {
 	// the data is already in memory when they return it to FUSE.
 	UseVectoredRead bool
 
+	// Number of goroutines (and hopefully threads) to use for reading from
+	// the FUSE file descriptor. You can try to use more than 1 if memory
+	// copying during write operations is a bottleneck for you
+	ReaderThreads int
+
 	// OS X only.
 	//
 	// The name of the mounted volume, as displayed in the Finder. If empty, a

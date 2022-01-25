@@ -23,6 +23,7 @@ type MountedFileSystem struct {
 
 	// The result to return from Join. Not valid until the channel is closed.
 	joinStatus          error
+	joinRemaining       int64
 	joinStatusAvailable chan struct{}
 }
 
