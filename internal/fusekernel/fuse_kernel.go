@@ -386,6 +386,7 @@ const (
 	OpDestroy     = 38
 	OpIoctl       = 39 // Linux?
 	OpPoll        = 40 // Linux?
+	OpBatchForget = 42
 	OpFallocate   = 43
 
 	// OS X
@@ -414,6 +415,16 @@ func EntryOutSize(p Protocol) uintptr {
 }
 
 type ForgetIn struct {
+	Nlookup uint64
+}
+
+type BatchForgetIn struct {
+	Nforget uint32
+	Dummy   uint32
+}
+
+type ForgetOne struct {
+	Nodeid  uint64
 	Nlookup uint64
 }
 

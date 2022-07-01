@@ -220,6 +220,21 @@ type ForgetInodeOp struct {
 	OpContext OpContext
 }
 
+// Decrement the reference count for multiple inodes previously issued by the file
+// system.
+//
+// Otherwise identical to ForgetInodeOp, but contains a list of inode numbers and
+// reference count decrements.
+type BatchForgetOp struct {
+	Items []ForgetOne
+	OpContext OpContext
+}
+
+type ForgetOne struct {
+	Inode InodeID
+	N     uint64
+}
+
 ////////////////////////////////////////////////////////////////////////
 // Inode creation
 ////////////////////////////////////////////////////////////////////////

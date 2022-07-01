@@ -265,7 +265,7 @@ func (c *Connection) beginOp(
 	// should not record any state keyed on their ID.
 	//
 	// Cf. https://github.com/osxfuse/osxfuse/issues/208
-	if opCode != fusekernel.OpForget {
+	if opCode != fusekernel.OpForget && opCode != fusekernel.OpBatchForget {
 		var cancel func()
 		ctx, cancel = context.WithCancel(ctx)
 		c.recordCancelFunc(fuseID, cancel)
@@ -292,7 +292,7 @@ func (c *Connection) finishOp(
 	//
 	// Special case: we don't do this for Forget requests. See the note in
 	// beginOp above.
-	if opCode != fusekernel.OpForget {
+	if opCode != fusekernel.OpForget && opCode != fusekernel.OpBatchForget {
 		cancel, ok := c.cancelFuncs[fuseID]
 		if !ok {
 			panic(fmt.Sprintf("Unknown request ID in finishOp: %v", fuseID))
