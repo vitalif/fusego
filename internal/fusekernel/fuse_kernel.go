@@ -168,7 +168,7 @@ const (
 
 // OpenAccessModeMask is a bitmask that separates the access mode
 // from the other flags in OpenFlags.
-const OpenAccessModeMask OpenFlags = syscall.O_ACCMODE
+const OpenAccessModeMask OpenFlags = OpenReadOnly | OpenWriteOnly | OpenReadWrite
 
 // OpenFlags are the O_FOO flags passed to open/create/etc calls. For
 // example, os.O_WRONLY | os.O_APPEND.
