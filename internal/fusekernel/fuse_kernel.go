@@ -41,6 +41,8 @@ import (
 	"unsafe"
 )
 
+var IsPlatformFuseT bool
+
 // The FUSE version implemented by the package.
 const (
 	ProtoVersionMinMajor = 7
