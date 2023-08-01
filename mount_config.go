@@ -151,6 +151,11 @@ type MountConfig struct {
 	// OpenDir calls at all (Linux >= 5.1):
 	EnableNoOpendirSupport bool
 
+	// Tell the kernel to use READDIRPLUS.
+	// Note that the implementation may still fall back to READDIR if the running
+	// kernel doesn't have support for READDIRPLUS.
+	UseReadDirPlus bool
+
 	// Disable FUSE default permissions.
 	// This is useful for situations where the backing data store (e.g., S3) doesn't
 	// actually utilise any form of qualifiable UNIX permissions.

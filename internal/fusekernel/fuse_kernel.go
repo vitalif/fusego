@@ -417,6 +417,7 @@ const (
 	OpNotifyReply = 41
 	OpBatchForget = 42
 	OpFallocate   = 43
+	OpReaddirplus = 44
 
 	// OS X
 	OpSetvolname = 61

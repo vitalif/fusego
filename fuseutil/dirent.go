@@ -19,6 +19,7 @@ import (
 	"unsafe"
 
 	"github.com/jacobsa/fuse/fuseops"
+	"github.com/jacobsa/fuse/internal/fusekernel"
 )
 
 type DirentType uint32
@@ -50,10 +51,18 @@ type Dirent struct {
 	Type DirentType
 }
 
-// Write the supplied directory entry intto the given buffer in the format
-// expected in fuseops.ReadFileOp.Data, returning the number of bytes written.
+// Write the supplied directory entry into the given buffer in the format
+// expected in fuseops.ReadDirOp.Data, returning the number of bytes written.
 // Return zero if the entry would not fit.
 func WriteDirent(buf []byte, d Dirent) (n int) {
+	return WriteDirentPlus(buf, nil, d)
+}
+
+// Write the supplied directory entry and, optionally, inode entry into the
+// given buffer in the format expected in fuseops.ReadDirOp.Data with enabled
+// READDIRPLUS capability, returning the number of bytes written.
+// Returns zero if the entry would not fit.
+func WriteDirentPlus(buf []byte, e *fuseops.ChildInodeEntry, d Dirent) (n int) {
 	// We want to write bytes with the layout of fuse_dirent
 	// (http://goo.gl/BmFxob) in host order. The struct must be aligned according
 	// to FUSE_DIRENT_ALIGN (http://goo.gl/UziWvH), which dictates 8-byte
@@ -78,8 +87,19 @@ func WriteDirent(buf []byte, d Dirent) (n int) {
 
 	// Do we have enough room?
 	totalLen := direntSize + len(d.Name) + padLen
+	if e != nil {
+		// READDIRPLUS was added in protocol 7.21, entry attributes were added in 7.9
+		// So here EntryOut is always full-length
+		totalLen += int(unsafe.Sizeof(fusekernel.EntryOut{}))
+	}
 	if totalLen > len(buf) {
 		return n
+	}
+
+	if e != nil {
+		out := (*fusekernel.EntryOut)(unsafe.Pointer(&buf[n]))
+		fuseops.ConvertChildInodeEntry(e, out)
+		n += int(unsafe.Sizeof(fusekernel.EntryOut{}))
 	}
 
 	// Write the header.
