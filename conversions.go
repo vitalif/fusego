@@ -401,6 +401,8 @@ func convertInMessage(
 		}
 		o = to
 
+	case fusekernel.OpReaddirplus:
+		fallthrough
 	case fusekernel.OpReaddir:
 		in := (*fusekernel.ReadIn)(inMsg.Consume(fusekernel.ReadInSize(protocol)))
 		if in == nil {
@@ -411,6 +413,7 @@ func convertInMessage(
 			Inode:  fuseops.InodeID(inMsg.Header().Nodeid),
 			Handle: fuseops.HandleID(in.Fh),
 			Offset: fuseops.DirOffset(in.Offset),
+			Plus:   inMsg.Header().Opcode == fusekernel.OpReaddirplus,
 			OpContext: fuseops.OpContext{
 				FuseID: inMsg.Header().Unique,
 				Pid:    inMsg.Header().Pid,

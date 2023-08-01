@@ -153,6 +153,7 @@ func (c *Connection) Init() error {
 	cacheSymlinks := initOp.Flags&fusekernel.InitCacheSymlinks > 0
 	noOpenSupport := initOp.Flags&fusekernel.InitNoOpenSupport > 0
 	noOpendirSupport := initOp.Flags&fusekernel.InitNoOpendirSupport > 0
+	readdirplusSupport := initOp.Flags&fusekernel.InitDoReaddirplus > 0
 
 	// Respond to the init op.
 	initOp.Library = c.protocol
@@ -198,6 +199,11 @@ func (c *Connection) Init() error {
 	// Tell the Kernel to allow sending parallel lookup and readdir operations.
 	if c.cfg.EnableParallelDirOps {
 		initOp.Flags |= fusekernel.InitParallelDirOps
+	}
+
+	// Tell the kernel to do readdirplus (readdir+lookup in one call)
+	if c.cfg.UseReadDirPlus && readdirplusSupport {
+		initOp.Flags |= fusekernel.InitDoReaddirplus
 	}
 
 	return c.Reply(ctx, nil)
