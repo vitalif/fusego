@@ -846,37 +846,37 @@ func (c *Connection) kernelResponseForOp(
 	case *fuseops.LookUpInodeOp:
 		size := int(fusekernel.EntryOutSize(c.protocol))
 		out := (*fusekernel.EntryOut)(m.Grow(size))
-		convertChildInodeEntry(&o.Entry, out)
+		fuseops.ConvertChildInodeEntry(&o.Entry, out)
 
 	case *fuseops.GetInodeAttributesOp:
 		size := int(fusekernel.AttrOutSize(c.protocol))
 		out := (*fusekernel.AttrOut)(m.Grow(size))
-		out.AttrValid, out.AttrValidNsec = convertExpirationTime(
+		out.AttrValid, out.AttrValidNsec = fuseops.ConvertExpirationTime(
 			o.AttributesExpiration)
-		convertAttributes(o.Inode, &o.Attributes, &out.Attr)
+		fuseops.ConvertAttributes(o.Inode, &o.Attributes, &out.Attr)
 
 	case *fuseops.SetInodeAttributesOp:
 		size := int(fusekernel.AttrOutSize(c.protocol))
 		out := (*fusekernel.AttrOut)(m.Grow(size))
-		out.AttrValid, out.AttrValidNsec = convertExpirationTime(
+		out.AttrValid, out.AttrValidNsec = fuseops.ConvertExpirationTime(
 			o.AttributesExpiration)
-		convertAttributes(o.Inode, &o.Attributes, &out.Attr)
+		fuseops.ConvertAttributes(o.Inode, &o.Attributes, &out.Attr)
 
 	case *fuseops.MkDirOp:
 		size := int(fusekernel.EntryOutSize(c.protocol))
 		out := (*fusekernel.EntryOut)(m.Grow(size))
-		convertChildInodeEntry(&o.Entry, out)
+		fuseops.ConvertChildInodeEntry(&o.Entry, out)
 
 	case *fuseops.MkNodeOp:
 		size := int(fusekernel.EntryOutSize(c.protocol))
 		out := (*fusekernel.EntryOut)(m.Grow(size))
-		convertChildInodeEntry(&o.Entry, out)
+		fuseops.ConvertChildInodeEntry(&o.Entry, out)
 
 	case *fuseops.CreateFileOp:
 		eSize := int(fusekernel.EntryOutSize(c.protocol))
 
 		e := (*fusekernel.EntryOut)(m.Grow(eSize))
-		convertChildInodeEntry(&o.Entry, e)
+		fuseops.ConvertChildInodeEntry(&o.Entry, e)
 
 		oo := (*fusekernel.OpenOut)(m.Grow(int(unsafe.Sizeof(fusekernel.OpenOut{}))))
 		oo.Fh = uint64(o.Handle)
@@ -884,12 +884,12 @@ func (c *Connection) kernelResponseForOp(
 	case *fuseops.CreateSymlinkOp:
 		size := int(fusekernel.EntryOutSize(c.protocol))
 		out := (*fusekernel.EntryOut)(m.Grow(size))
-		convertChildInodeEntry(&o.Entry, out)
+		fuseops.ConvertChildInodeEntry(&o.Entry, out)
 
 	case *fuseops.CreateLinkOp:
 		size := int(fusekernel.EntryOutSize(c.protocol))
 		out := (*fusekernel.EntryOut)(m.Grow(size))
-		convertChildInodeEntry(&o.Entry, out)
+		fuseops.ConvertChildInodeEntry(&o.Entry, out)
 
 	case *fuseops.RenameOp:
 		// Empty response
@@ -1117,65 +1117,6 @@ func (c *Connection) kernelNotification(
 ////////////////////////////////////////////////////////////////////////
 // General conversions
 ////////////////////////////////////////////////////////////////////////
-
-func convertTime(t time.Time) (secs uint64, nsec uint32) {
-	totalNano := t.UnixNano()
-	secs = uint64(totalNano / 1e9)
-	nsec = uint32(totalNano % 1e9)
-	return secs, nsec
-}
-
-func convertAttributes(
-	inodeID fuseops.InodeID,
-	in *fuseops.InodeAttributes,
-	out *fusekernel.Attr) {
-	out.Ino = uint64(inodeID)
-	out.Size = in.Size
-	out.Atime, out.AtimeNsec = convertTime(in.Atime)
-	out.Mtime, out.MtimeNsec = convertTime(in.Mtime)
-	out.Ctime, out.CtimeNsec = convertTime(in.Ctime)
-	out.SetCrtime(convertTime(in.Crtime))
-	out.Nlink = in.Nlink
-	out.Uid = in.Uid
-	out.Gid = in.Gid
-	// round up to the nearest 512 boundary
-	out.Blocks = (in.Size + 512 - 1) / 512
-
-	// Set the mode.
-	out.Mode = fuseops.ConvertGoMode(in.Mode)
-
-	if out.Mode&(syscall.S_IFCHR|syscall.S_IFBLK) != 0 {
-		out.Rdev = in.Rdev
-	}
-}
-
-// Convert an absolute cache expiration time to a relative time from now for
-// consumption by the fuse kernel module.
-func convertExpirationTime(t time.Time) (secs uint64, nsecs uint32) {
-	// Fuse represents durations as unsigned 64-bit counts of seconds and 32-bit
-	// counts of nanoseconds (https://tinyurl.com/4muvkr6k). So negative
-	// durations are right out. There is no need to cap the positive magnitude,
-	// because 2^64 seconds is well longer than the 2^63 ns range of
-	// time.Duration.
-	d := t.Sub(time.Now())
-	if d > 0 {
-		secs = uint64(d / time.Second)
-		nsecs = uint32((d % time.Second) / time.Nanosecond)
-	}
-
-	return secs, nsecs
-}
-
-func convertChildInodeEntry(
-	in *fuseops.ChildInodeEntry,
-	out *fusekernel.EntryOut) {
-	out.Nodeid = uint64(in.Child)
-	out.Generation = uint64(in.Generation)
-	out.EntryValid, out.EntryValidNsec = convertExpirationTime(in.EntryExpiration)
-	out.AttrValid, out.AttrValidNsec = convertExpirationTime(in.AttributesExpiration)
-
-	convertAttributes(in.Child, &in.Attributes, &out.Attr)
-}
 
 func writeXattrSize(m *buffer.OutMessage, size uint32) {
 	out := (*fusekernel.GetxattrOut)(m.Grow(int(unsafe.Sizeof(fusekernel.GetxattrOut{}))))
