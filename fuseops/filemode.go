@@ -26,7 +26,6 @@ func ConvertFileMode(unixMode uint32) os.FileMode {
 		mode |= os.ModeSocket
 	default:
 		// no idea
-		mode |= os.ModeDevice
 	}
 	if unixMode&syscall.S_ISUID != 0 {
 		mode |= os.ModeSetuid
