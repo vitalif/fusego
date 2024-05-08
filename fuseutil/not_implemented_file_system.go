@@ -204,6 +204,12 @@ func (fs *NotImplementedFileSystem) Fallocate(
 	return fuse.ENOSYS
 }
 
+func (fs *NotImplementedFileSystem) SyncFS(
+	ctx context.Context,
+	op *fuseops.SyncFSOp) error {
+	return fuse.ENOSYS
+}
+
 func (fs *NotImplementedFileSystem) Poll(
 	ctx context.Context,
 	op *fuseops.PollOp) error {

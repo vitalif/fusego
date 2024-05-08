@@ -63,6 +63,7 @@ type FileSystem interface {
 	ListXattr(context.Context, *fuseops.ListXattrOp) error
 	SetXattr(context.Context, *fuseops.SetXattrOp) error
 	Fallocate(context.Context, *fuseops.FallocateOp) error
+	SyncFS(context.Context, *fuseops.SyncFSOp) error
 	Poll(context.Context, *fuseops.PollOp) error
 
 	SetConnection(*fuse.Connection)
@@ -244,6 +245,9 @@ func (s *fileSystemServer) handleOp(
 
 	case *fuseops.PollOp:
 		err = s.fs.Poll(ctx, typed)
+
+	case *fuseops.SyncFSOp:
+		err = s.fs.SyncFS(ctx, typed)
 	}
 
 	c.Reply(ctx, err)
