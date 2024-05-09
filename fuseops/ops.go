@@ -983,6 +983,11 @@ type FallocateOp struct {
 	OpContext OpContext
 }
 
+type SyncFSOp struct {
+	Inode     InodeID
+	OpContext OpContext
+}
+
 // Request notifications when the file system user calls poll/select or
 // similar operations on a file.
 type PollOp struct {
