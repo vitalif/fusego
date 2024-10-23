@@ -57,6 +57,7 @@ func convertInMessage(
 				FuseID: inMsg.Header().Unique,
 				Pid:    inMsg.Header().Pid,
 				Uid:    inMsg.Header().Uid,
+				Gid:    inMsg.Header().Gid,
 			},
 		}
 
@@ -67,6 +68,7 @@ func convertInMessage(
 				FuseID: inMsg.Header().Unique,
 				Pid:    inMsg.Header().Pid,
 				Uid:    inMsg.Header().Uid,
+				Gid:    inMsg.Header().Gid,
 			},
 		}
 
@@ -83,6 +85,7 @@ func convertInMessage(
 				FuseID: inMsg.Header().Unique,
 				Pid:    inMsg.Header().Pid,
 				Uid:    inMsg.Header().Uid,
+				Gid:    inMsg.Header().Gid,
 			},
 		}
 		o = to
@@ -134,6 +137,7 @@ func convertInMessage(
 				FuseID: inMsg.Header().Unique,
 				Pid:    inMsg.Header().Pid,
 				Uid:    inMsg.Header().Uid,
+				Gid:    inMsg.Header().Gid,
 			},
 		}
 
@@ -164,6 +168,7 @@ func convertInMessage(
 				FuseID: inMsg.Header().Unique,
 				Pid:    inMsg.Header().Pid,
 				Uid:    inMsg.Header().Uid,
+				Gid:    inMsg.Header().Gid,
 			},
 		}
 
@@ -195,6 +200,7 @@ func convertInMessage(
 				FuseID: inMsg.Header().Unique,
 				Pid:    inMsg.Header().Pid,
 				Uid:    inMsg.Header().Uid,
+				Gid:    inMsg.Header().Gid,
 			},
 		}
 
@@ -220,6 +226,7 @@ func convertInMessage(
 				FuseID: inMsg.Header().Unique,
 				Pid:    inMsg.Header().Pid,
 				Uid:    inMsg.Header().Uid,
+				Gid:    inMsg.Header().Gid,
 			},
 		}
 
@@ -244,6 +251,7 @@ func convertInMessage(
 				FuseID: inMsg.Header().Unique,
 				Pid:    inMsg.Header().Pid,
 				Uid:    inMsg.Header().Uid,
+				Gid:    inMsg.Header().Gid,
 			},
 		}
 
@@ -267,6 +275,7 @@ func convertInMessage(
 				FuseID: inMsg.Header().Unique,
 				Pid:    inMsg.Header().Pid,
 				Uid:    inMsg.Header().Uid,
+				Gid:    inMsg.Header().Gid,
 			},
 		}
 
@@ -313,6 +322,7 @@ func convertInMessage(
 				FuseID: inMsg.Header().Unique,
 				Pid:    inMsg.Header().Pid,
 				Uid:    inMsg.Header().Uid,
+				Gid:    inMsg.Header().Gid,
 			},
 		}
 
@@ -330,6 +340,7 @@ func convertInMessage(
 				FuseID: inMsg.Header().Unique,
 				Pid:    inMsg.Header().Pid,
 				Uid:    inMsg.Header().Uid,
+				Gid:    inMsg.Header().Gid,
 			},
 		}
 
@@ -347,6 +358,7 @@ func convertInMessage(
 				FuseID: inMsg.Header().Unique,
 				Pid:    inMsg.Header().Pid,
 				Uid:    inMsg.Header().Uid,
+				Gid:    inMsg.Header().Gid,
 			},
 		}
 
@@ -364,6 +376,7 @@ func convertInMessage(
 				FuseID: inMsg.Header().Unique,
 				Pid:    inMsg.Header().Pid,
 				Uid:    inMsg.Header().Uid,
+				Gid:    inMsg.Header().Gid,
 			},
 		}
 
@@ -374,6 +387,7 @@ func convertInMessage(
 				FuseID: inMsg.Header().Unique,
 				Pid:    inMsg.Header().Pid,
 				Uid:    inMsg.Header().Uid,
+				Gid:    inMsg.Header().Gid,
 			},
 		}
 
@@ -392,6 +406,7 @@ func convertInMessage(
 				FuseID: inMsg.Header().Unique,
 				Pid:    inMsg.Header().Pid,
 				Uid:    inMsg.Header().Uid,
+				Gid:    inMsg.Header().Gid,
 			},
 		}
 		if !config.UseVectoredRead {
@@ -418,6 +433,7 @@ func convertInMessage(
 				FuseID: inMsg.Header().Unique,
 				Pid:    inMsg.Header().Pid,
 				Uid:    inMsg.Header().Uid,
+				Gid:    inMsg.Header().Gid,
 			},
 		}
 		o = to
@@ -446,6 +462,7 @@ func convertInMessage(
 				FuseID: inMsg.Header().Unique,
 				Pid:    inMsg.Header().Pid,
 				Uid:    inMsg.Header().Uid,
+				Gid:    inMsg.Header().Gid,
 			},
 		}
 
@@ -462,6 +479,7 @@ func convertInMessage(
 				FuseID: inMsg.Header().Unique,
 				Pid:    inMsg.Header().Pid,
 				Uid:    inMsg.Header().Uid,
+				Gid:    inMsg.Header().Gid,
 			},
 		}
 
@@ -485,6 +503,7 @@ func convertInMessage(
 				FuseID: inMsg.Header().Unique,
 				Pid:    inMsg.Header().Pid,
 				Uid:    inMsg.Header().Uid,
+				Gid:    inMsg.Header().Gid,
 			},
 		}
 
@@ -502,6 +521,7 @@ func convertInMessage(
 				FuseID: inMsg.Header().Unique,
 				Pid:    inMsg.Header().Pid,
 				Uid:    inMsg.Header().Uid,
+				Gid:    inMsg.Header().Gid,
 			},
 		}
 
@@ -531,6 +551,7 @@ func convertInMessage(
 				FuseID: inMsg.Header().Unique,
 				Pid:    inMsg.Header().Pid,
 				Uid:    inMsg.Header().Uid,
+				Gid:    inMsg.Header().Gid,
 			},
 		}
 
@@ -541,6 +562,7 @@ func convertInMessage(
 				FuseID: inMsg.Header().Unique,
 				Pid:    inMsg.Header().Pid,
 				Uid:    inMsg.Header().Uid,
+				Gid:    inMsg.Header().Gid,
 			},
 		}
 
@@ -596,6 +618,7 @@ func convertInMessage(
 				FuseID: inMsg.Header().Unique,
 				Pid:    inMsg.Header().Pid,
 				Uid:    inMsg.Header().Uid,
+				Gid:    inMsg.Header().Gid,
 			},
 		}
 
@@ -613,6 +636,7 @@ func convertInMessage(
 				FuseID: inMsg.Header().Unique,
 				Pid:    inMsg.Header().Pid,
 				Uid:    inMsg.Header().Uid,
+				Gid:    inMsg.Header().Gid,
 			},
 		}
 
@@ -637,6 +661,7 @@ func convertInMessage(
 				FuseID: inMsg.Header().Unique,
 				Pid:    inMsg.Header().Pid,
 				Uid:    inMsg.Header().Uid,
+				Gid:    inMsg.Header().Gid,
 			},
 		}
 		o = to
@@ -669,6 +694,7 @@ func convertInMessage(
 				FuseID: inMsg.Header().Unique,
 				Pid:    inMsg.Header().Pid,
 				Uid:    inMsg.Header().Uid,
+				Gid:    inMsg.Header().Gid,
 			},
 		}
 		o = to
@@ -712,6 +738,7 @@ func convertInMessage(
 				FuseID: inMsg.Header().Unique,
 				Pid:    inMsg.Header().Pid,
 				Uid:    inMsg.Header().Uid,
+				Gid:    inMsg.Header().Gid,
 			},
 		}
 	case fusekernel.OpFallocate:
@@ -731,6 +758,7 @@ func convertInMessage(
 				FuseID: inMsg.Header().Unique,
 				Pid:    inMsg.Header().Pid,
 				Uid:    inMsg.Header().Uid,
+				Gid:    inMsg.Header().Gid,
 			},
 		}
 
